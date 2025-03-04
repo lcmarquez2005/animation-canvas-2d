@@ -65,13 +65,13 @@ let circle1 = new Circle(
   5
 );
 
-let circle2 = new Circle(
+/* let circle2 = new Circle(
   Math.random() * (window_width - 60) + 30,
   Math.random() * (window_height - 60) + 30,
   Math.random() * 30 + 10,
   "red",
   2
-);
+); */
 
 // Función para actualizar los círculos
 function updateCircles() {
