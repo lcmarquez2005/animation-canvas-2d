@@ -1,12 +1,5 @@
 const canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
-let counter = 0;
-let aux = 0;
-
-let counterTag = document.createElement("p");
-counterTag.id = "counter";
-
-
 
 // Obtiene las dimensiones de la pantalla actual
 const window_height = 300;
@@ -16,71 +9,46 @@ const window_width = 300;
 canvas.height = window_height;
 canvas.width = window_width;
 
-// canvas.style.background = "#ff8";
-
 class Circle {
-  constructor(x, y, radius, color, text, speed) {
+  constructor(x, y, radius, color, speed) {
     this.posX = x;
     this.posY = y;
     this.radius = radius;
     this.color = color;
-    this.text = text;
-    
     this.speed = speed;
-    
-    this.dx = 0.3 * this.speed;
-    this.dy = 0.3 * this.speed;
+    this.dx = 1 * this.speed;
+    this.dy = 1 * this.speed;
+    this.bounceCount = 0; // Contador de rebotes individual
   }
-  
+
   draw(context) {
     context.beginPath();
-    
     context.strokeStyle = this.color;
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-    context.font = "20px Arial";
-    context.fillText(this.text, this.posX, this.posY);
-    
     context.lineWidth = 2;
     context.arc(this.posX, this.posY, this.radius, 0, Math.PI * 2, false);
     context.stroke();
     context.closePath();
+
+    // Dibujar el contador de rebotes dentro del círculo
+    context.fillStyle = this.color;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = "16px Arial";
+    context.fillText(this.bounceCount, this.posX, this.posY);
   }
-  
+
   update(context) {
-    // Context.clearRect(0, 0, window_width, window_height); // Descomentar si deseas borrar el canvas
-    document.getElementById("counter-card").appendChild(counterTag);
-    
     this.draw(context);
-    aux = counter;
 
-    // Si el círculo supera el margen derecho, se mueve a la izquierda
-    if (this.posX + this.radius > window_width) {
+    // Verificar colisiones y actualizar contador de rebotes
+    if (this.posX + this.radius > window_width || this.posX - this.radius < 0) {
       this.dx = -this.dx;
-      counter++;
+      this.bounceCount++;
     }
 
-    // Si el círculo supera el margen izquierdo, se mueve a la derecha
-    if (this.posX - this.radius < 0) {
-      this.dx = -this.dx;
-      counter++;
-    }
-
-    // Si el círculo supera el margen superior, se mueve hacia abajo
-    if (this.posY - this.radius < 0) {
+    if (this.posY + this.radius > window_height || this.posY - this.radius < 0) {
       this.dy = -this.dy;
-      counter++;
-    }
-
-    // Si el círculo supera el margen inferior, se mueve hacia arriba
-    if (this.posY + this.radius > window_height) {
-      this.dy = -this.dy;
-      counter++;
-    }
-    
-
-    if(aux != counter) {
-      counterTag.innerHTML = counter;
+      this.bounceCount++;
     }
 
     this.posX += this.dx;
@@ -88,25 +56,29 @@ class Circle {
   }
 }
 
-let randomRadius = Math.floor(Math.random() * 100 + 30);
-let randomX = Math.random() * (window_width - randomRadius * 2) + randomRadius;  // Asegura que el círculo no se salga por los bordes
-let randomY = Math.random() * (window_height - randomRadius * 2) + randomRadius;  // Lo mismo para Y
+// Crear dos círculos con posiciones aleatorias
+let circle1 = new Circle(
+  Math.random() * (window_width - 60) + 30,
+  Math.random() * (window_height - 60) + 30,
+  Math.random() * 30 + 30,
+  "blue",
+  5
+);
 
+let circle2 = new Circle(
+  Math.random() * (window_width - 60) + 30,
+  Math.random() * (window_height - 60) + 30,
+  Math.random() * 30 + 10,
+  "red",
+  2
+);
 
-
-// Crear el círculo con la posición y tamaño calculado
-let miCirculo = new Circle(randomX, randomY, randomRadius, "blue", "Tec1", 5);
-miCirculo.draw(ctx);
-
-let miCirculo2 = new Circle(randomX, randomY, randomRadius, "red", "Tec2", 2);
-miCirculo2.draw(ctx);
-
-// Función para actualizar el círculo
-let updateCircle = function () {
-  requestAnimationFrame(updateCircle);
+// Función para actualizar los círculos
+function updateCircles() {
+  requestAnimationFrame(updateCircles);
   ctx.clearRect(0, 0, window_width, window_height);
-  miCirculo.update(ctx);
-  miCirculo2.update(ctx);
-};
+  circle1.update(ctx);
+  circle2.update(ctx);
+}
 
-updateCircle();
+updateCircles();
