@@ -60,7 +60,7 @@ class Circle {
 let circle1 = new Circle(
   Math.random() * (window_width - 60) + 30,
   Math.random() * (window_height - 60) + 30,
-  Math.random() * 30 + 30,
+  Math.random() * 30 + 10,
   "blue",
   5
 );
