@@ -56,14 +56,31 @@ class Circle {
   }
 }
 
+/* function randomRadius() {
+  return Math.floor(Math.random() * 100 + 30)
+} */
+let randomRadius = 0
+randomRadius= Math.floor(Math.random() * 100 + 30);
+
+function randomX() {
+  return Math.random() * (window_width - randomRadius * 2) + randomRadius;  // Asegura que el círculo no se salga por los bordes
+
+}
+function randomY() {
+  return Math.random() * (window_height - randomRadius * 2) + randomRadius;  // Lo mismo para Y
+} 
+
+
+
 // Crear dos círculos con posiciones aleatorias
 let circle1 = new Circle(
-  Math.random() * (window_width - 60) + 30,
-  Math.random() * (window_height - 60) + 30,
-  Math.random() * 30 + 10,
+  Math.random() * (window_width - randomRadius * 2) + randomRadius,
+  Math.random() * (window_height - randomRadius * 2) + randomRadius,
+  randomRadius,
   "blue",
   5
 );
+console.log(randomRadius);
 
 /* let circle2 = new Circle(
   Math.random() * (window_width - 60) + 30,
@@ -78,7 +95,7 @@ function updateCircles() {
   requestAnimationFrame(updateCircles);
   ctx.clearRect(0, 0, window_width, window_height);
   circle1.update(ctx);
-  circle2.update(ctx);
+  // circle2.update(ctx);
 }
 
 updateCircles();
